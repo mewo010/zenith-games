@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game & Tool Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Cyberpunk Theme */
+        :root {
+            --bg-dark: #0a0a0a;
+            --neon-green: #39ff14;
+            --neon-glow: 0 0 10px #39ff14, 0 0 20px #39ff14, 0 0 40px #39ff14;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Neon Text Glow */
+        .neon-text {
+            color: var(--neon-green);
+            text-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green);
+        }
+
+        /* Neon Border Glow */
+        .neon-border {
+            border: 1px solid var(--neon-green);
+            box-shadow: 0 0 5px var(--neon-green), inset 0 0 5px rgba(57, 255, 20, 0.1);
+        }
+
+        /* Button Glow Effect */
+        .btn-neon {
+            background: transparent;
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .btn-neon:hover {
+            background: var(--neon-green);
+            color: var(--bg-dark);
+            box-shadow: var(--neon-glow);
+        }
+
+        /* Card Hover Effect */
+        .game-card {
+            background: linear-gradient(145deg, #111111, #0d0d0d);
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+        }
+
+        /* Search Input Styling */
+        .search-input {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: var(--neon-green);
+        }
+
+        .search-input:focus {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: #666;
+        }
+
+        /* Image Placeholder */
+        .img-placeholder {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+            border: 1px dashed #333;
+        }
+
+        /* Sticky Bottom Banner */
+        .sticky-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        /* Square Ad Slot */
+        .ad-square {
+            background: #111;
+            border: 1px dashed #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.875rem;
+        }
+
+        /* Bottom padding for sticky banner */
+        .content-wrapper {
+            padding-bottom: 80px;
+        }
+
+        /* Scanline effect overlay */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            z-index: 1000;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Scanline Effect -->
+    <div class="scanlines"></div>
+
+    <!-- AD SLOT: Sticky Bottom Banner -->
+    <!-- <div class="sticky-banner bg-black border-t border-[#39ff14] p-3 text-center">
+        <div class="text-[#39ff14] text-sm">
+            [ADVERTISEMENT - STICKY BOTTOM BANNER - 728x90]
+        </div>
+    </div> -->
+
+    <!-- Header -->
+    <header class="bg-black/80 backdrop-blur-sm border-b border-[#39ff14]/30 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <!-- Logo -->
+                <h1 class="text-2xl md:text-3xl font-bold">
+                    <span class="neon-text">GAME</span>
+                    <span class="text-white">&</span>
+                    <span class="neon-text">TOOL</span>
+                    <span class="text-white">HUB</span>
+                </h1>
+
+                <!-- Search Bar -->
+                <div class="w-full md:w-96">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input w-full px-4 py-2 rounded-lg text-sm"
+                        placeholder="Search games..."
+                        oninput="filterGames()"
+                    >
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8 content-wrapper">
+        <!-- Games Grid -->
+        <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Cards will be injected here by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-[#39ff14]/30 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-gray-500 text-sm">
+                © 2026 Game & Tool Hub. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Safe Redirect: Replace this variable with your monetized shortener links
+        const downloadLink = "#";
+
+        // Sample Games Data
+        const games = [
+            {
+                id: 1,
+                title: "Cyber Runner",
+                description: "Fast-paced endless runner with neon city visuals and custom skateboards.",
+                image: null
+            },
+            {
+                id: 2,
+                title: "Pixel Quest",
+                description: "Retro-style RPG adventure with pixel art and challenging dungeons.",
+                image: null
+            },
+            {
+                id: 3,
+                title: "Neon Racer",
+                description: "High-speed racing game with glowing tracks and customizable vehicles.",
+                image: null
+            },
+            {
+                id: 4,
+                title: "Space Defender",
+                description: "Classic arcade shooter with modern graphics and boss battles.",
+                image: null
+            },
+            // AD SLOT: Square ad after every 4 cards (position 4)
+            // <div class="ad-square col-span-1 row-span-1 h-48">[SQUARE AD - 300x250]</div>
+            {
+                id: 5,
+                title: "Zombie Outbreak",
+                description: "Survival horror game with crafting system and multiplayer mode.",
+                image: null
+            },
+            {
+                id: 6,
+                title: "Puzzle Master",
+                description: "Brain-teasing puzzles with over 500 levels and daily challenges.",
+                image: null
+            },
+            {
+                id: 7,
+                title: "Tank Battle",
+                description: "Strategic tank warfare with online multiplayer and custom maps.",
+                image: null
+            },
+            {
+                id: 8,
+                title: "Fishing Simulator",
+                description: "Relaxing fishing game with various locations and rare fish to catch.",
+                image: null
+            },
+            {
+                id: 9,
+                title: "Street Fighter Clone",
+                description: "Fast-paced fighting game with combos and special moves.",
+                image: null
+            },
+            {
+                id: 10,
+                title: "Minecraft Tools",
+                description: "Collection of useful tools and mods for Minecraft players.",
+                image: null
+            },
+            {
+                id: 11,
+                title: "Chess Pro",
+                description: "Advanced chess game with AI difficulty levels and online play.",
+                image: null
+            },
+            {
+                id: 12,
+                title: "VPN Master",
+                description: "Secure your connection with this easy-to-use VPN tool.",
+                image: null
+            }
+        ];
+
+        // Render game cards with ad slots
+        function renderGames(gamesToRender) {
+            const grid = document.getElementById('gamesGrid');
+            grid.innerHTML = '';
+            
+            let cardCount = 0;
+            
+            gamesToRender.forEach((game, index) => {
+                // Add square ad slot after every 4 cards
+                if (cardCount > 0 && cardCount % 4 === 0) {
+                    const adSlot = document.createElement('div');
+                    adSlot.className = 'ad-square col-span-1 row-span-1 h-48 rounded-lg neon-border';
+                    adSlot.innerHTML = '<span class="text-[#39ff14]">[AD - 300x250]</span>';
+                    grid.appendChild(adSlot);
+                }
+                
+                // Create game card
+                const card = document.createElement('div');
+                card.className = 'game-card neon-border rounded-lg overflow-hidden';
+                card.setAttribute('data-title', game.title.toLowerCase());
+                
+                card.innerHTML = `
+                    <!-- Image Placeholder -->
+                    <div class="img-placeholder h-40 flex items-center justify-center">
+                        <svg class="w-16 h-16 text-[#39ff14]/30" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    
+                    <!-- Card Content -->
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold text-white mb-2">${game.title}</h3>
+                        <p class="text-gray-400 text-sm mb-4">${game.description}</p>
+                        <a 
+                            href="${downloadLink}" 
+                            class="btn-neon w-full block text-center py-2 px-4 rounded text-sm"
+                            onclick="handleDownload(event, '${game.title}')"
+                        >
+                            Download
+                        </a>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+                cardCount++;
+            });
+            
+            // Add final ad slot if there are remaining cards
+            if (cardCount > 0 && cardCount % 4 === 0) {
+                const adSlot = document.createElement('div');
+                adSlot.className = 'ad-square col-span-1 row-span-1 h-48 rounded-lg neon-border';
+                adSlot.innerHTML = '<span class="text-[#39ff14]">[AD - 300x250]</span>';
+                grid.appendChild(adSlot);
+            }
+        }
+
+        // Search/Filter Function
+        function filterGames() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filteredGames = games.filter(game => 
+                game.title.toLowerCase().includes(searchTerm)
+            );
+            renderGames(filteredGames);
+        }
+
+        // Download Handler
+        function handleDownload(event, gameTitle) {
+            // Currently links to placeholder. Replace downloadLink variable with your monetized shortener
+            console.log(`Download clicked for: ${gameTitle}`);
+            // Example monetized link usage:
+            // window.location.href = "https://your-shortener.com/abc123";
+        }
+
+        // Initial Render
+        renderGames(games);
+    </script>
+</body>
+</html>
