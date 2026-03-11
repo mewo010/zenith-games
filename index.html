@@ -131,10 +131,10 @@
     <div class="scanlines"></div>
 
     <!-- AD SLOT: Sticky Bottom Banner -->
-    <div class="sticky-banner bg-black border-t border-[#bf00ff] p-3 text-center">
+    <!-- <div class="sticky-banner bg-black border-t border-[#bf00ff] p-3 text-center">
         <div class="text-[#bf00ff] text-sm mb-2">[BOTTOM BANNER AD]</div>
         <script src="https://pl28896405.effectivegatecpm.com/be/3e/ac/be3eac3d4a1c24a21539f79b59818bd4.js"></script>
-    </div>
+    </div> -->
 
     <!-- Header -->
     <header class="bg-black/80 backdrop-blur-sm border-b border-[#bf00ff]/30 sticky top-0 z-50">
@@ -272,11 +272,17 @@
                 // Add square ad slot after every 4 cards
                 if (cardCount > 0 && cardCount % 4 === 0) {
                     const adSlot = document.createElement('div');
-                    adSlot.className = 'ad-square col-span-1 row-span-1 h-48 rounded-lg neon-border';
-                    adSlot.innerHTML = '<div class="text-[#bf00ff] text-sm mb-2">[SQUARE AD]</div>';
+                    adSlot.className = 'ad-square col-span-1 row-span-1 rounded-lg neon-border';
+                    adSlot.style.minHeight = '250px';
+                    adSlot.style.display = 'flex';
+                    adSlot.style.flexDirection = 'column';
+                    adSlot.style.alignItems = 'center';
+                    adSlot.style.justifyContent = 'center';
+                    adSlot.innerHTML = '<div id="ad-slot-1"><!-- ADVERTISEMENT PLACEHOLDER --></div>';
                     
                     // Load ad script
                     const adScript = document.createElement('script');
+                    adScript.setAttribute('data-cfasync', 'false');
                     adScript.src = 'https://pl28896405.effectivegatecpm.com/be/3e/ac/be3eac3d4a1c24a21539f79b59818bd4.js';
                     adScript.async = true;
                     adScript.defer = true;
@@ -319,11 +325,17 @@
             // Add final ad slot if there are remaining cards
             if (cardCount > 0 && cardCount % 4 === 0) {
                 const adSlot = document.createElement('div');
-                adSlot.className = 'ad-square col-span-1 row-span-1 h-48 rounded-lg neon-border';
-                adSlot.innerHTML = '<div class="text-[#bf00ff] text-sm mb-2">[SQUARE AD]</div>';
+                adSlot.className = 'ad-square col-span-1 row-span-1 rounded-lg neon-border';
+                adSlot.style.minHeight = '250px';
+                adSlot.style.display = 'flex';
+                adSlot.style.flexDirection = 'column';
+                adSlot.style.alignItems = 'center';
+                adSlot.style.justifyContent = 'center';
+                adSlot.innerHTML = '<div id="ad-slot-1"><!-- ADVERTISEMENT PLACEHOLDER --></div>';
                 
                 // Load ad script
                 const adScript = document.createElement('script');
+                adScript.setAttribute('data-cfasync', 'false');
                 adScript.src = 'https://pl28896405.effectivegatecpm.com/be/3e/ac/be3eac3d4a1c24a21539f79b59818bd4.js';
                 adScript.async = true;
                 adScript.defer = true;
@@ -353,5 +365,7 @@
         // Initial Render
         renderGames(games);
     </script>
+    <!-- Popunder Script - Invisible at bottom of page -->
+    <script data-cfasync="false" src="https://pl28896405.effectivegatecpm.com/be/3e/ac/be3eac3d4a1c24a21539f79b59818bd4.js"></script>
 </body>
 </html>
